@@ -53,8 +53,18 @@ namespace hex::plugin::builtin {
     protected:
         void reloadDrives();
 
-        std::set<std::string> m_availableDrives;
+        struct DriveInfo {
+            std::string path;
+            std::string friendlyName;
+
+            auto operator<=>(const DriveInfo &other) const {
+                return this->path <=> other.path;
+            }
+        };
+
+        std::set<DriveInfo> m_availableDrives;
         std::fs::path m_path;
+        std::string m_friendlyName;
 
 #if defined(OS_WINDOWS)
         HANDLE m_diskHandle = INVALID_HANDLE_VALUE;
